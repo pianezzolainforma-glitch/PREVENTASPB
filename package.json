@@ -4,7 +4,7 @@
   "description": "Sistema de preventas con Node.js y Express",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node App.js"
   },
   "dependencies": {
     "express": "^4.18.2",
