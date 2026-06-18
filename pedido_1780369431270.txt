@@ -1,0 +1,12 @@
+INSERT INTO PedidosVentas 
+    (NroPedido, NombreSucursal, NroVendedor, PV, NumCliente, NroFlete, FechaHoraPedido, FacturaNegativo, NombreFormaPago, UsuarioCreador, NombreVencimiento, TipoComprobante) 
+    VALUES (@NroPedido, 'CASA CENTRAL', '', 3, '207', 0, #2026-06-02 03:03:51#, -1, 'EFECTIVO', 'MOVIL', '30 DIAS', 'FV');
+INSERT INTO DetallePedidosVentas 
+      (NroPedido, Sucursal, Indice, CodigoProducto, Deposito, CantidadVendida, Estado, ImpC_IVA, ImpC_IngresosBrutos, ImpC_Interno, ComisionVendedor, ListaPrecio, Porcentaje1ListaPrecio, Porcentaje2ListaPrecio, Porcentaje3ListaPrecio, PorcentajeDescuentoIncremento, CostoNeto, PrecioNetoVentaInicial) 
+      VALUES (@NroPedido, 'CASA CENTRAL', 1, '4188', 'Deposito1', '1.00', 'PENDIENTE', 21.00, 0, 0, 4, '2.TARJETA', 12.00, 17.00, 0.00, 0, '19703.91', '23841.73');
+INSERT INTO DetallePedidosVentas 
+      (NroPedido, Sucursal, Indice, CodigoProducto, Deposito, CantidadVendida, Estado, ImpC_IVA, ImpC_IngresosBrutos, ImpC_Interno, ComisionVendedor, ListaPrecio, Porcentaje1ListaPrecio, Porcentaje2ListaPrecio, Porcentaje3ListaPrecio, PorcentajeDescuentoIncremento, CostoNeto, PrecioNetoVentaInicial) 
+      VALUES (@NroPedido, 'CASA CENTRAL', 2, '4186', 'Deposito1', '1.00', 'PENDIENTE', 21.00, 0, 0, 4, '2.TARJETA', 12.00, 17.00, 0.00, 0, '12850.56', '15549.18');
+INSERT INTO DetallePedidosVentas 
+      (NroPedido, Sucursal, Indice, CodigoProducto, Deposito, CantidadVendida, Estado, ImpC_IVA, ImpC_IngresosBrutos, ImpC_Interno, ComisionVendedor, ListaPrecio, Porcentaje1ListaPrecio, Porcentaje2ListaPrecio, Porcentaje3ListaPrecio, PorcentajeDescuentoIncremento, CostoNeto, PrecioNetoVentaInicial) 
+      VALUES (@NroPedido, 'CASA CENTRAL', 3, '4185', 'Deposito1', '1.00', 'PENDIENTE', 21.00, 0, 0, 4, '2.TARJETA', 12.00, 17.00, 0.00, 0, '11993.77', '14512.46');

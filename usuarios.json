@@ -1,0 +1,17 @@
+[
+  {
+    "usuario": "admin",
+    "passwordHash": "$2b$10$GtyeoUqpRLWpua/zdOAU1.F5VLgdiFbgZfTOa/s8uo4N7uCvuaIz2",
+    "nrovendedor": "5005"
+  },
+  {
+    "usuario": "Pablo",
+    "passwordHash": "$2b$10$xR1xAelUo/BX6WAigRX26OOsCJg7.hN3VyxtxOcU1snIMsuPlt8lO",
+    "nrovendedor": "1004"
+  },
+  {
+    "usuario": "mica",
+    "passwordHash": "$2b$10$..jWF8BL2AY5OuvW7qnxSeh9QzpYkXkObmy9MM5eFU72XaUKDhs.a",
+    "nrovendedor": "1005"
+  }
+]
