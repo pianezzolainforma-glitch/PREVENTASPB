@@ -6,13 +6,15 @@ const XLSX = require("xlsx");
 const fs = require("fs");
 const path = require("path");
 const ftp = require("basic-ftp");
+// Importar funciones desde usuarios.js
 const { validarUsuario, agregarUsuario, editarUsuario, leerUsuarios } = require("./usuarios");
+
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(session({
-  secret: process.env.SECRET_KEY || "clave-secreta", // 🔑 ahora configurable
+  secret: process.env.SECRET_KEY || "clave-secreta",
   resave: false,
   saveUninitialized: true
 }));
@@ -25,20 +27,13 @@ function leerExcel(ruta, hoja = 0) {
 }
 
 // 🚀 Leer clientes desde Excel
-function obtenerClientes() {
-  const clientesExcel = leerExcel("./clientes.xlsx");
-  return clientesExcel.map(c => ({
-    codigo: c["NumCliente"],
-    nombre: c["Nombre_Cliente"],
-    apellido: c["Apellido_Cliente"]
-  }));
-}
+const clientesExcel = leerExcel("./clientes.xlsx");
+const clientesDisponibles = clientesExcel.map(c => ({
+  codigo: c["NumCliente"],        
+  nombre: c["Nombre_Cliente"],    
+  apellido: c["Apellido_Cliente"] 
+}));
 
-// Ejemplo de ruta que devuelve clientes
-app.get("/clientes", (req, res) => {
-  const clientesDisponibles = obtenerClientes();
-  res.json(clientesDisponibles);
-});
 // Routers
 app.use("/dashboard", dashboardRouter);
 app.use("/pedido", productosRouter);
@@ -255,6 +250,6 @@ app.get("/", (req, res) => {
 
 // Inicio del servidor
 const port = process.env.PORT || 3000;
-app.listen(port, '0.0.0.0', () => {
+app.listen(port, "0.0.0.0", () => {
   console.log("Servidor iniciado en http://localhost:3000");
 });
