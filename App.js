@@ -25,13 +25,20 @@ function leerExcel(ruta, hoja = 0) {
 }
 
 // 🚀 Leer clientes desde Excel
-const clientesExcel = leerExcel("./clientes.xlsx");
-const clientesDisponibles = clientesExcel.map(c => ({
-  codigo: c["NumCliente"],        
-  nombre: c["Nombre_Cliente"],    
-  apellido: c["Apellido_Cliente"] 
-}));
+function obtenerClientes() {
+  const clientesExcel = leerExcel("./clientes.xlsx");
+  return clientesExcel.map(c => ({
+    codigo: c["NumCliente"],
+    nombre: c["Nombre_Cliente"],
+    apellido: c["Apellido_Cliente"]
+  }));
+}
 
+// Ejemplo de ruta que devuelve clientes
+app.get("/clientes", (req, res) => {
+  const clientesDisponibles = obtenerClientes();
+  res.json(clientesDisponibles);
+});
 // Routers
 app.use("/dashboard", dashboardRouter);
 app.use("/pedido", productosRouter);
