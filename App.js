@@ -9,7 +9,7 @@ const ftp = require("basic-ftp");
 
 
 // Importar funciones desde usuarios.js
-//const { validarUsuario, agregarUsuario, editarUsuario, leerUsuarios } = require("./usuarios");
+
 
 
 const app = express();
@@ -39,6 +39,8 @@ const clientesDisponibles = clientesExcel.map(c => ({
 // Routers
 app.use("/dashboard", dashboardRouter);
 app.use("/pedido", productosRouter);
+
+const { validarUsuario, agregarUsuario, editarUsuario, leerUsuarios } = require("./usuarios");
 
 // Login
 app.get("/login", (req, res) => {
