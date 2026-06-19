@@ -6,8 +6,10 @@ const XLSX = require("xlsx");
 const fs = require("fs");
 const path = require("path");
 const ftp = require("basic-ftp");
+
+
 // Importar funciones desde usuarios.js
-const { validarUsuario, agregarUsuario, editarUsuario, leerUsuarios } = require("./usuarios");
+//const { validarUsuario, agregarUsuario, editarUsuario, leerUsuarios } = require("./usuarios");
 
 
 const app = express();
