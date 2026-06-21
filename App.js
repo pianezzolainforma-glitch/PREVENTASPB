@@ -29,12 +29,12 @@ function leerExcel(ruta, hoja = 0) {
 }
 
 // 🚀 Leer clientes desde Excel
-const clientesExcel = leerExcel("./clientes.xlsx");
-const clientesDisponibles = clientesExcel.map(c => ({
-  codigo: c["NumCliente"],        
-  nombre: c["Nombre_Cliente"],    
-  apellido: c["Apellido_Cliente"] 
-}));
+//const clientesExcel = leerExcel("./clientes.xlsx");
+//const clientesDisponibles = clientesExcel.map(c => ({
+  //codigo: c["NumCliente"],        
+  //nombre: c["Nombre_Cliente"],    
+  //apellido: c["Apellido_Cliente"] 
+//}));
 
 // Routers
 app.use("/dashboard", dashboardRouter);
@@ -140,9 +140,24 @@ app.get("/logout", (req, res) => {
 // Selección de cliente
 app.get("/clientes", (req, res) => {
   if (!req.session.user) return res.redirect("/login");
+
+  // ✅ Ahora leemos el archivo solo cuando se entra a /clientes
+  let clientesDisponibles = [];
+  try {
+    const clientesExcel = leerExcel("./clientes.xlsx");
+    clientesDisponibles = clientesExcel.map(c => ({
+      codigo: c["NumCliente"],
+      nombre: c["Nombre_Cliente"],
+      apellido: c["Apellido_Cliente"]
+    }));
+  } catch (err) {
+    return res.send("Error al cargar clientes: " + err.message);
+  }
+
   const opcionesClientes = clientesDisponibles.map(c =>
     `<option value="${c.codigo}">${c.codigo} - ${c.nombre} ${c.apellido || ""}</option>`
   ).join("");
+
   res.send(`<!DOCTYPE html>
   <html><head><title>Seleccionar Cliente</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
