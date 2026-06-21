@@ -226,7 +226,7 @@ app.post("/pedido", async (req, res) => {
       host: "c1342049.ferozo.com",
       user: "admin@sgoventas.com",
       password: "Vamport@sgo2026",
-      secure: true
+      secure: false
     });
     await client.uploadFrom(filePath, "/vaamport/bajada/" + path.basename(filePath));
 
