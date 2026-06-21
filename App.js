@@ -9,7 +9,8 @@ const ftp = require("basic-ftp");
 
 
 // Importar funciones desde usuarios.js
-const { validarUsuario } = require("./usuarios"); // 👈 Importación correcta
+const { validarUsuario, agregarUsuario, editarUsuario, leerUsuarios } = require("./usuarios");
+
 
 
 const app = express();
@@ -67,18 +68,34 @@ app.get("/login", (req, res) => {
   </body></html>`);
 });
 
+// Procesar login
+//app.post("/login", (req, res) => {
+  //const { usuario, password } = req.body;
+  //if (validarUsuario(usuario, password)) {
+    //const usuarios = leerUsuarios();
+    //const user = usuarios.find(u => u.usuario === usuario);
+    //req.session.user = usuario;
+    //req.session.nrovendedor = user.nrovendedor; 
+    //res.redirect("/dashboard");
+  //} else {
+    //res.send("Usuario o contraseña incorrectos");
+  //}
+//});
+//------------------------------------------------------------------------------------
+
 app.post("/login", (req, res) => {
   const { usuario, password } = req.body;
   if (validarUsuario(usuario, password)) {
-    const usuarios = leerUsuarios();
-    const user = usuarios.find(u => u.usuario === usuario);
     req.session.user = usuario;
-    req.session.nrovendedor = user.nrovendedor; 
     res.redirect("/dashboard");
   } else {
     res.send("Usuario o contraseña incorrectos");
   }
 });
+
+
+
+
 // Administración de usuarios
 app.get("/admin/usuarios", (req, res) => {
   if (!req.session.user) return res.redirect("/login");
