@@ -9,7 +9,7 @@ const ftp = require("basic-ftp");
 
 
 // Importar funciones desde usuarios.js
-
+const { validarUsuario } = require("./usuarios"); // 👈 Importación correcta
 
 
 const app = express();
@@ -39,8 +39,6 @@ function leerExcel(ruta, hoja = 0) {
 // Routers
 app.use("/dashboard", dashboardRouter);
 app.use("/pedido", productosRouter);
-
-const { validarUsuario, agregarUsuario, editarUsuario, leerUsuarios } = require("./usuarios");
 
 // Login
 app.get("/login", (req, res) => {
@@ -128,7 +126,6 @@ app.post("/admin/usuarios/editar", (req, res) => {
     res.send("Error: " + err.message);
   }
 });
-
 // Logout
 app.get("/logout", (req, res) => {
   req.session.destroy(err => {
@@ -200,7 +197,6 @@ app.get("/clientes", (req, res) => {
     </script>
   </body></html>`);
 });
-
 app.post("/clientes", (req, res) => {
   req.session.numcliente = req.body.numcliente;
   res.redirect("/pedido");
@@ -241,7 +237,7 @@ app.post("/pedido", async (req, res) => {
       host: "c1342049.ferozo.com",
       user: "admin@sgoventas.com",
       password: "Vamport@sgo2026",
-      secure: false
+      secure: true
     });
     await client.uploadFrom(filePath, "/vaamport/bajada/" + path.basename(filePath));
 
