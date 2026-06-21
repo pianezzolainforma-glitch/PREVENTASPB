@@ -26,8 +26,6 @@ app.get("/login", (req, res) => {
 // Ruta de login
 app.post("/login", (req, res) => {
   const { usuario, password } = req.body;
-
-  // ✅ Siempre funciona con admin/1234 porque usuarios.js lo inicializa
   if (validarUsuario(usuario, password)) {
     req.session.user = usuario;
     res.send("Login correcto. Bienvenido " + usuario);
@@ -50,7 +48,7 @@ app.get("/logout", (req, res) => {
   });
 });
 
-// Redirigir raíz al login
+// 🚀 Redirigir raíz al login
 app.get("/", (req, res) => {
   res.redirect("/login");
 });
