@@ -43,30 +43,70 @@ app.use("/pedido", productosRouter);
 
 // Login
 app.get("/login", (req, res) => {
-  res.send(`<!DOCTYPE html>
-  <html><head>
-    <title>Login</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-  </head>
-  <body class="bg-light d-flex align-items-center justify-content-center vh-100">
-    <div class="card shadow-lg p-4" style="width: 350px;">
-      <h3 class="text-center mb-3"><i class="bi bi-lock-fill"></i> Ingreso</h3>
-      <form method="POST" action="/login">
-        <div class="mb-3"><label class="form-label">Usuario</label>
-          <input type="text" name="usuario" class="form-control" placeholder="Ingrese su usuario">
-        </div>
-        <div class="mb-3"><label class="form-label">Contraseña</label>
-          <input type="password" name="password" class="form-control" placeholder="Ingrese su contraseña">
-        </div>
-        <button type="submit" class="btn btn-primary w-100">
-          <i class="bi bi-box-arrow-in-right"></i> Entrar
-        </button>
-      </form>
-    </div>
-  </body></html>`);
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+      <title>Login</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <style>
+        body {
+          margin: 0;
+          height: 100vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background: linear-gradient(135deg, #1e3c72, #2a5298); /* azul degradado */
+          font-family: Arial, sans-serif;
+        }
+        .login-box {
+          background: white;
+          padding: 30px;
+          border-radius: 10px;
+          box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+          text-align: center;
+          width: 300px;
+        }
+        h2 {
+          margin-bottom: 20px;
+          color: #1e3c72;
+        }
+        input {
+          display: block;
+          margin: 10px auto;
+          padding: 10px;
+          width: 90%;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+        }
+        button {
+          padding: 10px 20px;
+          background: #1e3c72;
+          border: none;
+          border-radius: 5px;
+          color: white;
+          cursor: pointer;
+          width: 100%;
+        }
+        button:hover {
+          background: #2a5298;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="login-box">
+        <h2>Login</h2>
+        <form method="POST" action="/login">
+          <input type="text" name="usuario" placeholder="Usuario" required />
+          <input type="password" name="password" placeholder="Contraseña" required />
+          <button type="submit">Entrar</button>
+        </form>
+      </div>
+    </body>
+    </html>
+  `);
 });
+
 
 // Procesar login
 app.post("/login", (req, res) => {

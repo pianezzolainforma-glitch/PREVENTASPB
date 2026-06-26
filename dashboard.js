@@ -13,7 +13,11 @@ router.get("/", (req, res) => {
       <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
       <style>
-        body { background-color: #f8f9fa; }
+        body {
+          margin: 0;
+          min-height: 100vh;
+          background: linear-gradient(135deg, #1e3c72, #2a5298); /* azul degradado */
+        }
         .card { border-radius: 12px; }
         footer { margin-top: 40px; padding: 15px; background: #212529; color: #fff; text-align: center; }
         .chart-container { position: relative; width: 100%; overflow-x: auto; }
@@ -43,7 +47,7 @@ router.get("/", (req, res) => {
 
       <!-- Título -->
       <div class="container mt-4">
-        <h2 class="text-center mb-4"><i class="bi bi-speedometer2"></i> Panel de Control</h2>
+        <h2 class="text-center mb-4 text-white"><i class="bi bi-speedometer2"></i> Panel de Control</h2>
 
         <!-- Tarjetas -->
         <div class="row g-3">
@@ -85,8 +89,8 @@ router.get("/", (req, res) => {
         </div>
 
         <!-- Gráfico -->
-        <h3 class="mt-5">Ventas por Cliente</h3>
-        <div class="chart-container">
+        <h3 class="mt-5 text-white">Ventas por Cliente</h3>
+        <div class="chart-container bg-light p-3 rounded shadow-sm">
           <canvas id="graficoClientes"></canvas>
         </div>
       </div>
