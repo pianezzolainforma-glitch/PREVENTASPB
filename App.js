@@ -69,29 +69,21 @@ app.get("/login", (req, res) => {
 });
 
 // Procesar login
-//app.post("/login", (req, res) => {
-  //const { usuario, password } = req.body;
-  //if (validarUsuario(usuario, password)) {
-    //const usuarios = leerUsuarios();
-    //const user = usuarios.find(u => u.usuario === usuario);
-    //req.session.user = usuario;
-    //req.session.nrovendedor = user.nrovendedor; 
-    //res.redirect("/dashboard");
-  //} else {
-    //res.send("Usuario o contraseña incorrectos");
-  //}
-//});
-//------------------------------------------------------------------------------------
-
 app.post("/login", (req, res) => {
-  const { usuario, password } = req.body;
+const { usuario, password } = req.body;
   if (validarUsuario(usuario, password)) {
-    req.session.user = usuario;
-    res.redirect("/dashboard");
+  const usuarios = leerUsuarios();
+  const user = usuarios.find(u => u.usuario === usuario);
+  req.session.user = usuario;
+  req.session.nrovendedor = user.nrovendedor; 
+  res.redirect("/dashboard");
   } else {
     res.send("Usuario o contraseña incorrectos");
   }
 });
+//------------------------------------------------------------------------------------
+
+
 
 
 
@@ -155,18 +147,19 @@ app.get("/logout", (req, res) => {
 app.get("/clientes", (req, res) => {
   if (!req.session.user) return res.redirect("/login");
 
-  // ✅ Ahora leemos el archivo solo cuando se entra a /clientes
-  let clientesDisponibles = [];
-  try {
-    const clientesExcel = leerExcel("./clientes.xlsx");
-    clientesDisponibles = clientesExcel.map(c => ({
-      codigo: c["NumCliente"],
-      nombre: c["Nombre_Cliente"],
-      apellido: c["Apellido_Cliente"]
-    }));
-  } catch (err) {
-    return res.send("Error al cargar clientes: " + err.message);
-  }
+ // ✅ Ahora leemos el archivo solo cuando se entra a /clientes
+let clientesDisponibles = [];
+try {
+  const clientesExcel = leerExcel(path.join(__dirname, "clientes.xlsx"));
+  clientesDisponibles = clientesExcel.map(c => ({
+    codigo: c["NumCliente"],
+    nombre: c["Nombre_Cliente"],
+    apellido: c["Apellido_Cliente"]
+  }));
+} catch (err) {
+  return res.send("Error al cargar clientes: " + err.message);
+}
+
 
   const opcionesClientes = clientesDisponibles.map(c =>
     `<option value="${c.codigo}">${c.codigo} - ${c.nombre} ${c.apellido || ""}</option>`
