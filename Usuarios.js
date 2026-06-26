@@ -1,19 +1,21 @@
-// usuarios.js
 const fs = require("fs");
 const path = require("path");
 const bcrypt = require("bcryptjs");
 
 const filePath = path.join(__dirname, "usuarios.json");
 
+// Leer usuarios desde el archivo JSON
 function leerUsuarios() {
   if (!fs.existsSync(filePath)) return [];
   return JSON.parse(fs.readFileSync(filePath, "utf8"));
 }
 
+// Guardar usuarios en el archivo JSON
 function guardarUsuarios(usuarios) {
   fs.writeFileSync(filePath, JSON.stringify(usuarios, null, 2));
 }
 
+// Validar usuario y contraseña
 function validarUsuario(usuario, password) {
   const usuarios = leerUsuarios();
   const user = usuarios.find(u => u.usuario === usuario);
@@ -21,6 +23,7 @@ function validarUsuario(usuario, password) {
   return bcrypt.compareSync(password, user.passwordHash);
 }
 
+// Agregar un nuevo usuario
 function agregarUsuario(usuario, password, nrovendedor) {
   const usuarios = leerUsuarios();
   if (usuarios.find(u => u.usuario === usuario)) {
@@ -31,6 +34,7 @@ function agregarUsuario(usuario, password, nrovendedor) {
   guardarUsuarios(usuarios);
 }
 
+// Editar usuario existente
 function editarUsuario(usuario, nuevaPassword, nuevoNroVendedor) {
   const usuarios = leerUsuarios();
   const user = usuarios.find(u => u.usuario === usuario);
@@ -55,4 +59,10 @@ if (!fs.existsSync(filePath)) {
   console.log("✅ Usuario inicial creado: admin / 1234 con NroVendedor 001");
 }
 
-module.exports = { validarUsuario, agregarUsuario, editarUsuario, leerUsuarios };
+// Exportar todas las funciones
+module.exports = {
+  validarUsuario,
+  agregarUsuario,
+  editarUsuario,
+  leerUsuarios
+};
