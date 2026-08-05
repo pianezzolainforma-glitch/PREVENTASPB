@@ -29,14 +29,6 @@ function leerExcel(ruta, hoja = 0) {
   return XLSX.utils.sheet_to_json(sheet, { defval: "" });
 }
 
-// 🚀 Leer clientes desde Excel
-//const clientesExcel = leerExcel("./clientes.xlsx");
-//const clientesDisponibles = clientesExcel.map(c => ({
-  //codigo: c["NumCliente"],        
-  //nombre: c["Nombre_Cliente"],    
-  //apellido: c["Apellido_Cliente"] 
-//}));
-
 // Routers
 app.use("/dashboard", dashboardRouter);
 app.use("/pedido", productosRouter);
@@ -183,70 +175,150 @@ app.get("/logout", (req, res) => {
   });
 });
 
+
+ // ✅ Ahora leemos el archivo solo cuando se entra a /clientes
 // Selección de cliente
 app.get("/clientes", (req, res) => {
   if (!req.session.user) return res.redirect("/login");
 
- // ✅ Ahora leemos el archivo solo cuando se entra a /clientes
-let clientesDisponibles = [];
-try {
-  const clientesExcel = leerExcel(path.join(__dirname, "clientes.xlsx"));
-  clientesDisponibles = clientesExcel.map(c => ({
-    codigo: c["NumCliente"],
-    nombre: c["Nombre_Cliente"],
-    apellido: c["Apellido_Cliente"]
-  }));
-} catch (err) {
-  return res.send("Error al cargar clientes: " + err.message);
-}
-
+  let clientesDisponibles = [];
+  try {
+    const clientesExcel = leerExcel(path.join(__dirname, "clientes.xlsx"));
+    clientesDisponibles = clientesExcel.map(c => ({
+      codigo: c["NumCliente"],
+      nombre: c["Nombre_Cliente"],
+      apellido: c["Apellido_Cliente"],
+      telefono: c["Telefono_cliente"],
+      lat: c["Lat"],
+      lng: c["Lng"]
+    }));
+  } catch (err) {
+    return res.send("Error al cargar clientes: " + err.message);
+  }
 
   const opcionesClientes = clientesDisponibles.map(c =>
     `<option value="${c.codigo}">${c.codigo} - ${c.nombre} ${c.apellido || ""}</option>`
   ).join("");
 
   res.send(`<!DOCTYPE html>
-  <html><head><title>Seleccionar Cliente</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-  </head><body class="bg-light d-flex align-items-center justify-content-center vh-100">
-    <div class="card shadow-lg p-4" style="width: 400px;">
-      <h3 class="text-center mb-3"><i class="bi bi-people-fill"></i> Selección de Cliente</h3>
-      <form method="POST" action="/clientes">
-        <div class="mb-3"><label class="form-label">Buscar Cliente</label>
-          <input type="text" id="busquedaCliente" class="form-control" placeholder="Nombre o Apellido...">
-        </div>
-        <div class="mb-3"><label class="form-label">Cliente</label>
-          <select id="listaClientes" name="numcliente" class="form-select" size="5">
-            ${opcionesClientes}
-          </select>
-        </div>
-        <button type="submit" class="btn btn-success w-100">
-          <i class="bi bi-check-circle"></i> Confirmar
-        </button>
-      </form>
-    </div>
-    <script>
-      const clientes = ${JSON.stringify(clientesDisponibles)};
-      const select = document.getElementById("listaClientes");
-      const input = document.getElementById("busquedaCliente");
-      input.addEventListener("keyup", () => {
-        const filtro = input.value.toLowerCase();
-        select.innerHTML = "";
-        clientes.filter(c => 
-          c.nombre.toLowerCase().includes(filtro) || 
-          (c.apellido && c.apellido.toLowerCase().includes(filtro))
-        ).forEach(c => {
-          const option = document.createElement("option");
-          option.value = c.codigo;
-          option.textContent = c.codigo + " - " + c.nombre + " " + (c.apellido || "");
-          select.appendChild(option);
-        });
+<html><head><title>Seleccionar Cliente</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+</head><body class="bg-light d-flex align-items-center justify-content-center vh-100">
+  <div class="card shadow-lg p-4" style="width: 400px;">
+    <h3 class="text-center mb-3"><i class="bi bi-people-fill"></i> Selección de Cliente</h3>
+    <form method="POST" action="/clientes">
+      <div class="mb-3"><label class="form-label">Buscar Cliente</label>
+        <input type="text" id="busquedaCliente" class="form-control" placeholder="Nombre o Apellido...">
+      </div>
+      <div class="mb-3"><label class="form-label">Cliente</label>
+        <select id="listaClientes" name="numcliente" class="form-select" size="5">
+          ${opcionesClientes}
+        </select>
+      </div>
+      <button type="submit" class="btn btn-success w-100">
+        <i class="bi bi-check-circle"></i> Confirmar
+      </button>
+      <button type="button" id="btnMaps" class="btn btn-primary w-100 mt-2">
+        <i class="bi bi-geo-alt-fill"></i> Ver ubicación en Google Maps
+      </button>
+    </form>
+  </div>
+  <script>
+    const clientes = ${JSON.stringify(clientesDisponibles)};
+    const select = document.getElementById("listaClientes");
+    const input = document.getElementById("busquedaCliente");
+    const btnMaps = document.getElementById("btnMaps");
+
+    // Filtro de clientes
+    input.addEventListener("keyup", () => {
+      const filtro = input.value.toLowerCase();
+      select.innerHTML = "";
+      clientes.filter(c => 
+        c.nombre.toLowerCase().includes(filtro) || 
+        (c.apellido && c.apellido.toLowerCase().includes(filtro))
+      ).forEach(c => {
+        const option = document.createElement("option");
+        option.value = c.codigo;
+        option.textContent = c.codigo + " - " + c.nombre + " " + (c.apellido || "");
+        select.appendChild(option);
       });
-    </script>
-  </body></html>`);
+    });
+
+    // Botón Google Maps con guardado de coordenadas
+    btnMaps.addEventListener("click", () => {
+      const selectedOption = select.options[select.selectedIndex];
+      if (!selectedOption) return alert("Selecciona un cliente primero");
+
+      const cliente = clientes.find(c => c.codigo == selectedOption.value);
+      if (!cliente || !cliente.lat || !cliente.lng) {
+        return alert("Este cliente no tiene geolocalización registrada");
+      }
+
+      // Abrir Google Maps
+      const url = \`https://www.google.com/maps?q=\${cliente.lat},\${cliente.lng}\`;
+      window.open(url, "_blank");
+
+      // Guardar coordenadas en Excel
+      fetch("/guardarUbicacion", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          codigo: cliente.codigo,
+          lat: cliente.lat,
+          lng: cliente.lng
+        })
+      }).then(r => r.json())
+        .then(data => console.log("Ubicación guardada:", data))
+        .catch(err => console.error("Error al guardar ubicación:", err));
+    });
+  </script>
+</body></html>`);
 });
+
+// Guardar coordenadas en el Excel
+app.post("/guardarUbicacion", (req, res) => {
+  const { codigo, lat, lng } = req.body;
+
+  if (!codigo || !lat || !lng) {
+    return res.status(400).json({ error: "Datos incompletos" });
+  }
+
+  try {
+    const rutaExcel = path.join(__dirname, "clientes.xlsx");
+    const workbook = XLSX.readFile(rutaExcel);
+    const sheetName = workbook.SheetNames[0];
+    const sheet = workbook.Sheets[sheetName];
+    let clientes = XLSX.utils.sheet_to_json(sheet, { defval: "" });
+
+    const idx = clientes.findIndex(c => c.NumCliente == codigo);
+    if (idx >= 0) {
+      clientes[idx].Lat = lat;
+      clientes[idx].Lng = lng;
+    } else {
+      clientes.push({
+        NumCliente: codigo,
+        Nombre_Cliente: "",
+        Apellido_Cliente: "",
+        Telefono_cliente: "",
+        Lat: lat,
+        Lng: lng
+      });
+    }
+
+    const nuevaHoja = XLSX.utils.json_to_sheet(clientes, { skipHeader: false });
+    workbook.Sheets[sheetName] = nuevaHoja;
+    XLSX.writeFile(workbook, rutaExcel);
+
+    res.json({ ok: true, mensaje: "Coordenadas guardadas en Excel correctamente" });
+  } catch (err) {
+    res.status(500).json({ error: "Error al actualizar Excel: " + err.message });
+  }
+});
+
+
+//----------------------------------------------------------------------------
 app.post("/clientes", (req, res) => {
   req.session.numcliente = req.body.numcliente;
   res.redirect("/pedido");
@@ -315,6 +387,7 @@ app.get("/", (req, res) => {
 
 // Inicio del servidor
 const port = process.env.PORT || 3000;
-app.listen(port, "0.0.0.0", () => {
-  console.log("Servidor iniciado en http://localhost:3000");
+app.listen(3000, "0.0.0.0", () => {
+  console.log("Servidor iniciado en http://0.0.0.0:3000");
+});
 });
