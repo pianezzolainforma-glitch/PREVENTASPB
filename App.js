@@ -363,7 +363,7 @@ app.post("/pedido", async (req, res) => {
       password: "Vaamport2026",
       secure: true
     });
-   await client.uploadFrom(filePath, "/PreventasFTP2/vaamport/bajada/" + path.basename(filePath));
+   await client.uploadFrom(filePath, "/home/PreventasFTP2/Vaamport/Bajada" + path.basename(filePath));
 
 
     res.send(`<!DOCTYPE html>
