@@ -358,7 +358,7 @@ app.post("/pedido", async (req, res) => {
   try {
     await sftp.connect({
       host: "108.61.205.44",
-      user: "PreventasFTP",
+      username: "PreventasFTP",
       password: "Vaamport2026",
       secure: true
     });
@@ -381,7 +381,7 @@ app.post("/pedido", async (req, res) => {
   } catch (err) {
     res.send("Error al subir al FTP: " + err.message);
   } finally {
-  	sftp .end();
+  sftp .end();
 }
 });
 
