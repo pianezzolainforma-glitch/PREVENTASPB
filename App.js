@@ -380,8 +380,9 @@ app.post("/pedido", async (req, res) => {
       </body></html>`);
   } catch (err) {
     res.send("Error al subir al FTP: " + err.message);
-  }
-  client.close();
+  } finally {
+  	sftp .end();
+}
 });
 
 // 🚀 Redirigir raíz al login
