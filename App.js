@@ -194,14 +194,12 @@ app.get("/clientes", (req, res) => {
     return res.send("Error al cargar clientes: " + err.message);
   }
 
-  // acá devolvés la vista o JSON según tu lógica
-  res.json(clientesDisponibles);
-});
-
+  // Generar opciones para el select
   const opcionesClientes = clientesDisponibles.map(c =>
     `<option value="${c.codigo}">${c.codigo} - ${c.nombre} ${c.apellido || ""}</option>`
   ).join("");
 
+  // Devolver HTML con Bootstrap
   res.send(`<!DOCTYPE html>
 <html><head><title>Seleccionar Cliente</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -247,6 +245,9 @@ app.get("/clientes", (req, res) => {
         select.appendChild(option);
       });
     });
+  </script>
+</body></html>`);
+});
 
     // Botón Google Maps con guardado de coordenadas
     btnMaps.addEventListener("click", () => {
