@@ -357,7 +357,7 @@ app.post("/pedido", async (req, res) => {
   const client = new ftp.Client();
   try {
     await client.access({
-      host: "sftp://108.61.205.44",
+      host: "108.61.205.44",
       user: "PreventasFTP",
       password: "Vaamport2026",
       secure: true
