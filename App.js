@@ -232,6 +232,7 @@ app.get("/logout", (req, res) => {
     const input = document.getElementById("busquedaCliente");
     const btnMaps = document.getElementById("btnMaps");
 
+    // Filtro de clientes
     input.addEventListener("keyup", () => {
       const filtro = input.value.toLowerCase();
       select.innerHTML = "";
@@ -245,26 +246,21 @@ app.get("/logout", (req, res) => {
         select.appendChild(option);
       });
     });
-  </script>
-</body></html>`);
-});
 
-
-    // Botón Google Maps con guardado de coordenadas
+    // Botón Google Maps
     btnMaps.addEventListener("click", () => {
       const selectedOption = select.options[select.selectedIndex];
       if (!selectedOption) return alert("Selecciona un cliente primero");
 
       const cliente = clientes.find(c => c.codigo == selectedOption.value);
-      if (!cliente || !cliente.lat || !cliente.lng) {
-        return alert("Este cliente no tiene geolocalización registrada");
+      if (!cliente) {
+        return alert("Este cliente no tiene datos suficientes");
       }
 
-      // Abrir Google Maps
-      const url = `https://www.google.com/maps/search/?q=${cliente.nombre} ${cliente.apellido}`;
-
+      // Abrir Google Maps con nombre/apellido
+      const url = \`https://www.google.com/maps/search/?q=\${cliente.nombre} \${cliente.apellido}\`;
       window.open(url, "_blank");
-
+ 
       // Guardar coordenadas en Excel
       fetch("/guardarUbicacion", {
         method: "POST",
