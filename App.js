@@ -176,9 +176,7 @@ app.get("/logout", (req, res) => {
 });
 
 
- // ✅ Ahora leemos el archivo solo cuando se entra a /clientes
-// Selección de cliente
-app.get("/clientes", (req, res) => {
+ app.get("/clientes", (req, res) => {
   if (!req.session.user) return res.redirect("/login");
 
   let clientesDisponibles = [];
@@ -194,12 +192,15 @@ app.get("/clientes", (req, res) => {
     return res.send("Error al cargar clientes: " + err.message);
   }
 
-  // Generar opciones para el select
   const opcionesClientes = clientesDisponibles.map(c =>
     `<option value="${c.codigo}">${c.codigo} - ${c.nombre} ${c.apellido || ""}</option>`
   ).join("");
 
-  // Devolver HTML con Bootstrap
+  const clientesJSON = JSON.stringify(clientesDisponibles)
+    .replace(/</g, "\\u003c")
+    .replace(/>/g, "\\u003e")
+    .replace(/&/g, "\\u0026");
+
   res.send(`<!DOCTYPE html>
 <html><head><title>Seleccionar Cliente</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -226,12 +227,11 @@ app.get("/clientes", (req, res) => {
     </form>
   </div>
   <script>
-   const clientes = ${JSON.stringify(clientesDisponibles).replace(/</g, "\\u003c")};
-   const select = document.getElementById("listaClientes");
+    const clientes = ${clientesJSON};
+    const select = document.getElementById("listaClientes");
     const input = document.getElementById("busquedaCliente");
     const btnMaps = document.getElementById("btnMaps");
 
-    // Filtro de clientes
     input.addEventListener("keyup", () => {
       const filtro = input.value.toLowerCase();
       select.innerHTML = "";
@@ -248,6 +248,7 @@ app.get("/clientes", (req, res) => {
   </script>
 </body></html>`);
 });
+
 
     // Botón Google Maps con guardado de coordenadas
     btnMaps.addEventListener("click", () => {
