@@ -357,9 +357,9 @@ app.post("/pedido", async (req, res) => {
   const client = new ftp.Client();
   try {
     await client.access({
-      host: "c1342049.ferozo.com",
-      user: "admin@sgoventas.com",
-      password: "Vamport@sgo2026",
+      host: "sftp://108.61.205.44",
+      user: "PreventasFTP",
+      password: "Vaamport2026",
       secure: true
     });
     await client.uploadFrom(filePath, "/vaamport/bajada/" + path.basename(filePath));
