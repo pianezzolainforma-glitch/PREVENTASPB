@@ -357,13 +357,13 @@ app.post("/pedido", async (req, res) => {
 
   const client = new ftp.Client();
   try {
-    await sftp.connect({
+    await client.access({
       host: "108.61.205.44",
       user: "PreventasFTP2",
       password: "Vaamport2026",
       secure: true
     });
-   await client.uploadFrom(filePath, "/home/PreventasFTP2/Vaamport/Bajada" + path.basename(filePath));
+   await client.uploadFrom(filePath, "/home/PreventasFTP2/Vaamport/Bajada/" + path.basename(filePath));
 
 
     res.send(`<!DOCTYPE html>
@@ -379,9 +379,9 @@ app.post("/pedido", async (req, res) => {
       </body></html>`);
   } catch (err) {
     res.send("Error al subir al FTP: " + err.message);
-  }
+  } finally {
 client.close();
-
+}
 });
 
 // 🚀 Redirigir raíz al login
