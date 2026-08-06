@@ -261,7 +261,8 @@ app.get("/logout", (req, res) => {
       }
 
       // Abrir Google Maps
-      const url = \`https://www.google.com/maps?q=\${cliente.lat},\${cliente.lng}\`;
+      const url = `https://www.google.com/maps/search/?q=${cliente.nombre} ${cliente.apellido}`;
+
       window.open(url, "_blank");
 
       // Guardar coordenadas en Excel
