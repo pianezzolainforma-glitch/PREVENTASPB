@@ -6,6 +6,7 @@ const XLSX = require("xlsx");
 const fs = require("fs");
 const path = require("path");
 const Client = require("ssh2-sftp-client");
+const ftp = require("basic-ftp");
 
 
 // Importar funciones desde usuarios.js
@@ -354,17 +355,15 @@ app.post("/pedido", async (req, res) => {
   const filePath = path.join(__dirname, `pedido_${Date.now()}.txt`);
   fs.writeFileSync(filePath, sql);
 
-  const sftp = new Client();
+  const client = new ftp.Client();
   try {
     await sftp.connect({
       host: "108.61.205.44",
-      username: "PreventasFTP",
+      user: "PreventasFTP2",
       password: "Vaamport2026",
-      
+      secure: true
     });
-    await sftp.put(
-    filePath,
-    "/home/PreventasFTP/Vaamport/" + path.basename(filePath)
+   await client.uploadFrom(filePath, "/PreventasFTP2/vaamport/bajada/" + path.basename(filePath));
 
 
     res.send(`<!DOCTYPE html>
@@ -380,9 +379,9 @@ app.post("/pedido", async (req, res) => {
       </body></html>`);
   } catch (err) {
     res.send("Error al subir al FTP: " + err.message);
-  } finally {
-  sftp .end();
-}
+  }
+client.close();
+
 });
 
 // 🚀 Redirigir raíz al login
