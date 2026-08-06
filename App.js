@@ -365,7 +365,7 @@ app.post("/pedido", async (req, res) => {
     });
     await sftp.put(
     filePath,
-    "/home/PreventasFTP/Vaamport/Bajada/" + path.basename(filePath)
+    "/home/PreventasFTP/Vaamport/" + path.basename(filePath)
 
 
     res.send(`<!DOCTYPE html>
