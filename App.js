@@ -360,7 +360,7 @@ app.post("/pedido", async (req, res) => {
       host: "108.61.205.44",
       username: "PreventasFTP",
       password: "Vaamport2026",
-      secure: true
+      
     });
     await sftp.put(
     filePath,
