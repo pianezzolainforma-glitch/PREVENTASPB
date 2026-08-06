@@ -226,8 +226,8 @@ app.get("/clientes", (req, res) => {
     </form>
   </div>
   <script>
-    const clientes = ${JSON.stringify(clientesDisponibles)};
-    const select = document.getElementById("listaClientes");
+   const clientes = ${JSON.stringify(clientesDisponibles).replace(/</g, "\\u003c")};
+   const select = document.getElementById("listaClientes");
     const input = document.getElementById("busquedaCliente");
     const btnMaps = document.getElementById("btnMaps");
 
