@@ -5,7 +5,6 @@ const session = require("express-session");
 const XLSX = require("xlsx"); 
 const fs = require("fs");
 const path = require("path");
-const ftp = require("basic-ftp");
 const Client = require("ssh2-sftp-client");
 
 
