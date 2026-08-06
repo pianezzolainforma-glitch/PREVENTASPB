@@ -188,13 +188,15 @@ app.get("/clientes", (req, res) => {
       codigo: c["NumCliente"],
       nombre: c["Nombre_Cliente"],
       apellido: c["Apellido_Cliente"],
-      telefono: c["Telefono_cliente"],
-      lat: c["Lat"],
-      lng: c["Lng"]
+      telefono: c["Telefono_cliente"]
     }));
   } catch (err) {
     return res.send("Error al cargar clientes: " + err.message);
   }
+
+  // acá devolvés la vista o JSON según tu lógica
+  res.json(clientesDisponibles);
+});
 
   const opcionesClientes = clientesDisponibles.map(c =>
     `<option value="${c.codigo}">${c.codigo} - ${c.nombre} ${c.apellido || ""}</option>`
