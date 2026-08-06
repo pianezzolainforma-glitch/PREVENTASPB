@@ -6,6 +6,7 @@ const XLSX = require("xlsx");
 const fs = require("fs");
 const path = require("path");
 const ftp = require("basic-ftp");
+const Client = require('ssh2-sftp-client');
 
 
 // Importar funciones desde usuarios.js
@@ -354,15 +355,18 @@ app.post("/pedido", async (req, res) => {
   const filePath = path.join(__dirname, `pedido_${Date.now()}.txt`);
   fs.writeFileSync(filePath, sql);
 
-  const client = new ftp.Client();
+  const sftp = new Client();
   try {
-    await client.access({
+    await sftp.connect({
       host: "108.61.205.44",
       user: "PreventasFTP",
       password: "Vaamport2026",
       secure: true
     });
-    await client.uploadFrom(filePath, "/home/PreventasFTP/Vaamport/Bajada/" + path.basename(filePath));
+    await sftp.put(
+    filePath,
+    "/home/PreventasFTP/Vaamport/Bajada/" + path.basename(filePath)
+
 
     res.send(`<!DOCTYPE html>
       <html><head>
